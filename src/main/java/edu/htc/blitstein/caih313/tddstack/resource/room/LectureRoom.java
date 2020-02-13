@@ -1,4 +1,6 @@
 package edu.htc.blitstein.caih313.tddstack.resource.room;
 
-public class LectureRoom {
+import edu.htc.blitstein.caih313.tddstack.IStackable;
+
+public class LectureRoom implements IStackable {
 }
