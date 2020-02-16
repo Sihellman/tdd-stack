@@ -1,26 +1,173 @@
 package edu.htc.blitstein.caih313.tddstack.engine;
 
 import edu.htc.blitstein.caih313.tddstack.IStackable;
+import java.util.Scanner;
 
-public class TddStack {
+import edu.htc.blitstein.caih313.tddstack.resource.campus.Faculty;
+import edu.htc.blitstein.caih313.tddstack.resource.campus.Student;
+import edu.htc.blitstein.caih313.tddstack.resource.room.ComputerLab;
+import edu.htc.blitstein.caih313.tddstack.resource.room.LectureRoom;
+
+public class TddStack implements IStackable {
     static long DEFAULT_DEPTH = 100;
     long stackDepth;
-    TddStack(long stackDepth){
+    private int currentNumber;
+    private IStackable[] storage;
+    private IStackable obj;
+    TddStack(long stackDepth, int currentNumber, IStackable[] storage){
+        this.stackDepth = stackDepth;
+        this.currentNumber = currentNumber;
+        this.storage = storage;
 
     }
     public TddStack(){
-
+        this(DEFAULT_DEPTH, 0, new IStackable[100]);
     }
     public boolean isEmpty(){
+        boolean empty = true;
+        for (int i = 0; i < storage.length; i++){
+            if (storage[i] != null){
+                empty = false;
+            }
+        }
+        return empty;
+
 
     }
+    public int getCurrentNumber(){
+        return currentNumber;
+    }
+    public IStackable[] getStorage(){
+        return storage;
+    }
     public boolean isFull(){
+        boolean full = true;
+        for (int i = 0; i < storage.length; i++){
+            if (storage[i] == null){
+                full = false;
+            }
+        }
+        return full;
 
     }
     public void push(IStackable obj){
+        if (currentNumber < storage.length) {
+            storage[currentNumber] = obj;
+            currentNumber++;
+        }
+    }
+
+    public IStackable pop(){
+
+        if (currentNumber == 0){
+            return null;
+        }
+        else{
+            obj = storage[currentNumber - 1];
+            storage[currentNumber - 1] = null;
+            currentNumber--;
+            return obj;
+        }
+
+
 
     }
-    public IStackable pop(){
+    public String toString(){
+        return obj + " ";
+    }
+
+
+
+
+    public static void main(String[] args) {
+        TddStack obj = null;
+        IStackable stackObject = null;
+        Scanner keyboard = new Scanner(System.in);
+        System.out.println("how many objects do you want to enter? press -1 if you don't know");
+        int num = keyboard.nextInt();
+        if(num == -1){
+            obj = new TddStack();
+        }
+        else if (num > -1) {
+            obj = new TddStack(num, 0, new IStackable[num]);
+        }
+        else {
+            System.exit(0);
+        }
+        while(true){
+            System.out.println("do you want to add an object?");
+            String ans = keyboard.next();
+            if ((ans.equalsIgnoreCase("yes")) && (!obj.isFull())){
+
+
+                    System.out.println("enter f for faculty, s for student, " +
+                            "c for computer lab, l for lecture room");
+                    ans = keyboard.next();
+                    if (ans.equals("f")){
+                        System.out.println("enter name");
+                        ans = keyboard.next();
+                        stackObject = new Faculty(ans);
+                    }
+                    else if (ans.equals("s")){
+                        System.out.println("enter name");
+                        ans = keyboard.next();
+                        stackObject = new Student(ans);
+                    }
+                    else if (ans.equals("c")){
+                        System.out.println("enter type");
+                        ans = keyboard.next();
+                        stackObject = new ComputerLab(ans);
+                    }
+                    else if (ans.equals("l")){
+                        System.out.println("enter number");
+                        int number = keyboard.nextInt();
+                        stackObject = new LectureRoom(number);
+                    }
+                    obj.push(stackObject);
+
+
+
+            }
+            else if ((obj.isFull()) && (ans.equalsIgnoreCase("yes"))){
+                System.out.println("no more room. would you like to pop?");
+                ans = keyboard.next();
+                if (ans.equalsIgnoreCase("yes")){
+
+                    System.out.println("you popped " + obj.pop());
+                }
+                else{
+                    for (int i = 0; i < obj.storage.length; i++){
+                        System.out.println(obj.storage[i]);
+                    }
+                    System.exit(0);
+                }
+            }
+            else {
+                System.out.println("do you want to pop?");
+                ans = keyboard.next();
+                if (ans.equalsIgnoreCase("yes")){
+                    if (obj.isEmpty()){
+                        for (int i = 0; i < obj.storage.length; i++){
+                            System.out.println("null");
+                        }
+                        System.exit(0);
+                    }
+                    else{
+                        System.out.println("you popped " + obj.pop());
+                    }
+                }
+                else {
+                    if (!obj.isEmpty()) {
+                        for (int i = 0; i < obj.storage.length; i++) {
+                            System.out.println(obj.storage[i]);
+
+                        }
+                    }
+                    System.exit(0);
+                }
+
+            }
+        }
 
     }
 }
