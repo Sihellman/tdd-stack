@@ -26,9 +26,9 @@ public class TddStackTest  {
     @Test
     public void testSet(){
 
-        long expected = TddStack.DEFAULT_DEPTH;
+        int expected = TddStack.DEFAULT_DEPTH;
         TddStack objresult = new TddStack();
-        long result = objresult.stackDepth;
+        int result = objresult.stackDepth;
         assertEquals(expected, result, 0.001);
 
     }
@@ -46,13 +46,22 @@ public class TddStackTest  {
 
     }
     @Test
+    public void testAddOneIsNotEmptyAndIsNotFull() {
+        TddStack tddStack = new TddStack(3);
+        Student student = new Student();
+        tddStack.push(student);
+        assertFalse(tddStack.isEmpty());
+        assertFalse(tddStack.isFull());
+    }
+    @Test
     public void testPopIsPush() {
         TddStack tddStack = new TddStack();
         //Faculty implements IStackable
-        IStackable iStackableOrig = new Faculty();
-        tddStack.push(iStackableOrig);
+        tddStack.push(obj1);
+        tddStack.push(obj2);
+        tddStack.push(obj3);
         IStackable iStackablePopped = tddStack.pop();
-        assertEquals(iStackableOrig, iStackablePopped);
+        assertEquals(obj3, iStackablePopped);
     }
     @Test
     public void testPopEmpty() {
@@ -64,16 +73,16 @@ public class TddStackTest  {
         TddStack tddStack = new TddStack();
         IStackable obj = new Faculty();
         tddStack.push(obj);
-        assertEquals(1, tddStack.getCurrentNumber());
+        assertEquals(0, tddStack.getCurrentNumber());
 
-        IStackable[] array = new IStackable[100];
-        array[0] = obj;
-        TddStack expectedObj = new TddStack(tddStack.DEFAULT_DEPTH, 1, array);
+
+        TddStack expectedObj = new TddStack();
         IStackable[] storage1 = tddStack.getStorage();
         IStackable[] storage2 = expectedObj.getStorage();
+        storage2[0] = obj;
 
 
-        for (int i = 0; i < array.length; i++){
+        for (int i = 0; i < storage1.length; i++){
             assertEquals(storage1[i], storage2[i]);
         }
 
@@ -88,16 +97,13 @@ public class TddStackTest  {
     }
     @Test
     public void testPushFull(){
-        IStackable[] it = new IStackable[3];
-        TddStack objresult = new TddStack(3, 0, it);
+
+        TddStack objresult = new TddStack(3);
 
 
         objresult.push(obj1);
         objresult.push(obj2);
         objresult.push(obj3);
-        for (int i = 0; i < it.length; i++){
-            System.out.println(it[i]);
-        }
         assertTrue(objresult.isFull());
 
     }
@@ -107,16 +113,16 @@ public class TddStackTest  {
         IStackable obj = new Faculty();
         tddStack.push(obj);
         tddStack.pop();
-        assertEquals(0, tddStack.getCurrentNumber());
+        assertEquals(-1, tddStack.getCurrentNumber());
 
-        IStackable[] array = new IStackable[100];
-        array[0] = null;
-        TddStack expectedObj = new TddStack(tddStack.DEFAULT_DEPTH, 0, array);
+
+        TddStack expectedObj = new TddStack();
         IStackable[] storage1 = tddStack.getStorage();
         IStackable[] storage2 = expectedObj.getStorage();
+        storage2[0] = null;
 
 
-        for (int i = 0; i < array.length; i++) {
+        for (int i = 0; i < storage1.length; i++) {
             assertEquals(storage1[i], storage2[i]);
         }
 

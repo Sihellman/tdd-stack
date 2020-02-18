@@ -9,29 +9,22 @@ import edu.htc.blitstein.caih313.tddstack.resource.room.ComputerLab;
 import edu.htc.blitstein.caih313.tddstack.resource.room.LectureRoom;
 
 public class TddStack implements IStackable {
-    static long DEFAULT_DEPTH = 100;
-    long stackDepth;
+    static int DEFAULT_DEPTH = 100;
+    int stackDepth;
     private int currentNumber;
     private IStackable[] storage;
     private IStackable obj;
-    TddStack(long stackDepth, int currentNumber, IStackable[] storage){
+    TddStack(int stackDepth){
         this.stackDepth = stackDepth;
-        this.currentNumber = currentNumber;
-        this.storage = storage;
+        currentNumber = -1;
+        storage = new IStackable[stackDepth];
 
     }
     public TddStack(){
-        this(DEFAULT_DEPTH, 0, new IStackable[100]);
+        this(DEFAULT_DEPTH);
     }
     public boolean isEmpty(){
-        boolean empty = true;
-        for (int i = 0; i < storage.length; i++){
-            if (storage[i] != null){
-                empty = false;
-            }
-        }
-        return empty;
-
+        return currentNumber == -1;
 
     }
     public int getCurrentNumber(){
@@ -41,30 +34,25 @@ public class TddStack implements IStackable {
         return storage;
     }
     public boolean isFull(){
-        boolean full = true;
-        for (int i = 0; i < storage.length; i++){
-            if (storage[i] == null){
-                full = false;
-            }
-        }
-        return full;
+        return currentNumber == storage.length - 1;
 
     }
     public void push(IStackable obj){
-        if (currentNumber < storage.length) {
-            storage[currentNumber] = obj;
+        if (currentNumber < storage.length -1) {
             currentNumber++;
+            storage[currentNumber] = obj;
+
         }
     }
 
     public IStackable pop(){
 
-        if (currentNumber == 0){
+        if (currentNumber == -1){
             return null;
         }
         else{
-            obj = storage[currentNumber - 1];
-            storage[currentNumber - 1] = null;
+            obj = storage[currentNumber];
+            storage[currentNumber] = null;
             currentNumber--;
             return obj;
         }
@@ -89,7 +77,7 @@ public class TddStack implements IStackable {
             obj = new TddStack();
         }
         else if (num > -1) {
-            obj = new TddStack(num, 0, new IStackable[num]);
+            obj = new TddStack(num);
         }
         else {
             System.exit(0);
